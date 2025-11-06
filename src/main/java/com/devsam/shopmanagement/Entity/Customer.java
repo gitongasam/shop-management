@@ -1,12 +1,12 @@
 package com.devsam.shopmanagement.Entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "customers")
@@ -22,5 +22,12 @@ public class Customer extends BaseEntity {
     private String email;
 
     private String phone;
+
+    @Column(name = "total_spent", precision = 12, scale = 2)
+    private BigDecimal totalSpent = BigDecimal.ZERO;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }
 
