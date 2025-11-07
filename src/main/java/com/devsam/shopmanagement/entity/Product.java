@@ -1,4 +1,4 @@
-package com.devsam.shopmanagement.Entity;
+package com.devsam.shopmanagement.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,6 +1,6 @@
-package com.devsam.shopmanagement.Repository;
+package com.devsam.shopmanagement.repository;
 
-import com.devsam.shopmanagement.Entity.Product;
+import com.devsam.shopmanagement.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;

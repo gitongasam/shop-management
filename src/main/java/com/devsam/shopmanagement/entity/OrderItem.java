@@ -1,9 +1,8 @@
-package com.devsam.shopmanagement.Entity;
+package com.devsam.shopmanagement.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Entity
 @Table(name = "order_items")

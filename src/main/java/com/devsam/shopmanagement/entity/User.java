@@ -1,4 +1,4 @@
-package com.devsam.shopmanagement.Entity;
+package com.devsam.shopmanagement.entity;
 
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.Order;
@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "users")

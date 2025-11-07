@@ -1,4 +1,4 @@
-package com.devsam.shopmanagement.Repository;
+package com.devsam.shopmanagement.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
