@@ -42,6 +42,8 @@ public class AuthService {
         user.setRefreshTokenExpiry(LocalDateTime.now().plusDays(7));
         userRepository.save(user);
 
+        System.out.println(user);
+
         return new AuthResponse(accessToken, refreshToken);
     }
 
