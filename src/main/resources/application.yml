@@ -21,10 +21,16 @@ spring:
     url: jdbc:postgresql://localhost:5432/shop_management
     user: postgres
     password: password
-    locations: classpath:db/migration
 
-  profiles:
-    active: docker
+jwt:
+  secret: "b2df428b9929d3ace7c6e7f49e9a5e5f478c25d6f83f1c4e5b8f1e5f4a9d8b77"
+  access:
+    expiration: 90000000
+  refresh:
+    expiration: 604800000
+
+profiles:
+  active: docker
 
 server:
   port: 8080
