@@ -3,6 +3,7 @@ package com.devsam.shopmanagement.service;
 import com.devsam.shopmanagement.dtos.AuthResponse;
 import com.devsam.shopmanagement.dtos.LoginRequest;
 import com.devsam.shopmanagement.dtos.RegisterRequest;
+import com.devsam.shopmanagement.dtos.RegisterResponse;
 import com.devsam.shopmanagement.entity.User;
 import com.devsam.shopmanagement.repository.UserRepository;
 import com.devsam.shopmanagement.security.Jwt.JwtService;
@@ -20,7 +21,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
-    public AuthResponse register(RegisterRequest request) {
+    public RegisterResponse register(RegisterRequest request) {
         // Create new user
         User user = User.builder()
                 .firstName(request.getFirstName())
@@ -29,22 +30,9 @@ public class AuthService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .shopName(request.getShopName())
                 .build();
+         userRepository.save(user);
 
-        // Save user before generating tokens (so they have an ID)
-        userRepository.save(user);
-
-        // Generate tokens
-        String accessToken = jwtService.generateAccessToken(user.getEmail(), "USER");
-        String refreshToken = jwtService.generateRefreshToken(user.getEmail());
-
-        // Save refresh token
-        user.setRefreshToken(refreshToken);
-        user.setRefreshTokenExpiry(LocalDateTime.now().plusDays(7));
-        userRepository.save(user);
-
-        System.out.println(user);
-
-        return new AuthResponse(accessToken, refreshToken);
+         return new RegisterResponse("User created succsifullu ", user.getEmail());
     }
 
     public AuthResponse login(LoginRequest request) {

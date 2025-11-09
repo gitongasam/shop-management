@@ -3,6 +3,8 @@ package com.devsam.shopmanagement.controller;
 import com.devsam.shopmanagement.dtos.AuthResponse;
 import com.devsam.shopmanagement.dtos.LoginRequest;
 import com.devsam.shopmanagement.dtos.RegisterRequest;
+import com.devsam.shopmanagement.dtos.RegisterResponse;
+import com.devsam.shopmanagement.entity.User;
 import com.devsam.shopmanagement.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +16,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public AuthResponse register(@RequestBody RegisterRequest request) {
+    public RegisterResponse register(@RequestBody RegisterRequest request) {
         return authService.register(request);
     }
 
