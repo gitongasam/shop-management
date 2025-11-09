@@ -13,6 +13,7 @@ CREATE TABLE users (
                        email VARCHAR(150) UNIQUE NOT NULL,
                        password VARCHAR(255) NOT NULL,
                        shop_name VARCHAR(150) NOT NULL,
+                        refreshToken VARCHAR(250) NOT NULL,
                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                        updated_at TIMESTAMP,
                        deleted_at TIMESTAMP

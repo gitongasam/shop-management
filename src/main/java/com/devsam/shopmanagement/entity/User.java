@@ -1,12 +1,12 @@
 package com.devsam.shopmanagement.entity;
 
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.Order;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -28,6 +28,12 @@ public class User extends BaseEntity {
 
     @Column(nullable = false)
     private String password;
+
+    @Column (nullable = false)
+    private String refreshToken;
+
+    @Column(name = "refresh_token_expiry")
+    private LocalDateTime refreshTokenExpiry;
 
     @Column(name = "shop_name", nullable = false)
     private String shopName;
