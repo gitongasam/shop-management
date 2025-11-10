@@ -14,7 +14,7 @@ public interface ProductService {
     Product addProduct(ProductRequest  productRequest, User user);
 
 //    get all products
-    Page<Product> getAllProducts(Pageable pageable);
+    Page<Product> getAllProducts(Pageable pageable, User user);
 
 //    get product by id
     Product getProductById(UUID id);
