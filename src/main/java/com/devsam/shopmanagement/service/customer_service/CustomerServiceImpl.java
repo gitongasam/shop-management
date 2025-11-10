@@ -24,7 +24,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         Customer customer = Customer.builder()
                 .name(customerRequest.getName())
-                .email(customerRequest.getEmail())
+                .location(customerRequest.getLocation())
                 .phone(customerRequest.getPhoneNumber())
                 .user(user)   // << important
                 .build();
