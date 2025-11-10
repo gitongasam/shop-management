@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,10 +22,10 @@ public class ProductController {
     private final UserRepository userRepository;
 
     @PostMapping
-    public Product AddProduct(ProductRequest productRequest, @AuthenticationPrincipal UserDetails userDetails) {
-        String email = userDetails.getUsername();
+    public Product AddProduct(@RequestBody ProductRequest productRequest, @AuthenticationPrincipal UserDetails userDetails) {
+       String email = userDetails.getUsername();
        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        return productService.addProduct(productRequest);
+        return productService.addProduct(productRequest, user);
     }
 }

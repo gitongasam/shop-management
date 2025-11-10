@@ -2,7 +2,9 @@ package com.devsam.shopmanagement.service.product_service;
 
 
 import com.devsam.shopmanagement.dtos.ProductRequest;
+import com.devsam.shopmanagement.entity.Customer;
 import com.devsam.shopmanagement.entity.Product;
+import com.devsam.shopmanagement.entity.User;
 import com.devsam.shopmanagement.errors.ResourceNotFoundException;
 import com.devsam.shopmanagement.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,16 +20,19 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     @Override
-    public Product addProduct(ProductRequest productRequest) {
-         Product product = new Product(
-                 productRequest.getName(),
-                 productRequest.getQuantity(),
-                 productRequest.getPrice()
-         );
-
+    public Product addProduct(ProductRequest productRequest, User user) {
+         Product product = Product.builder()
+                 .name(productRequest.getName())
+                 .price(productRequest.getPrice())
+                 .quantity(productRequest.getQuantity())
+                 .user(user)
+                 .build();
+        System.out.println("price: " + productRequest.getPrice());
 
         return productRepository.save(product);
+
     }
+
 
     @Override
     public Page<Product> getAllProducts(Pageable pageable) {
