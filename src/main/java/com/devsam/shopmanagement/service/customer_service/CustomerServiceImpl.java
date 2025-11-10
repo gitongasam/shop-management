@@ -2,6 +2,7 @@ package com.devsam.shopmanagement.service.customer_service;
 
 import com.devsam.shopmanagement.dtos.CustomerRequest;
 import com.devsam.shopmanagement.entity.Customer;
+import com.devsam.shopmanagement.entity.User;
 import com.devsam.shopmanagement.errors.ResourceNotFoundException;
 import com.devsam.shopmanagement.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,19 +20,21 @@ public class CustomerServiceImpl implements CustomerService {
 
     //    add customer
     @Override
-    public Customer addCustomer(CustomerRequest customerRequest) {
+    public Customer addCustomer(CustomerRequest customerRequest, User user) {
 
-        Customer customer = new Customer(
-                customerRequest.getName(),
-                customerRequest.getEmail(),
-                customerRequest.getPhoneNumber()
-        );
+        Customer customer = Customer.builder()
+                .name(customerRequest.getName())
+                .email(customerRequest.getEmail())
+                .phone(customerRequest.getPhoneNumber())
+                .user(user)   // << important
+                .build();
+
         return customerRepository.save(customer);
     }
 
     @Override
-    public Page<Customer> getAllCustomer(Pageable pageable) {
-        return customerRepository.findAll(pageable);
+    public Page<Customer> getAllCustomer(Pageable pageable, User user) {
+        return customerRepository.findByUser(user, pageable);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.devsam.shopmanagement.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,8 +19,8 @@ public class Customer extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, unique = true)
-    private String email;
+    @Column(nullable = false)
+    private String location;
 
     private String phone;
 
@@ -28,12 +29,13 @@ public class Customer extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 
 //    consturctor of the dtos
-    public Customer(String name, String email, String phoneNumber) {
+    public Customer(String name, String location, String phoneNumber) {
         this.name = name;
-        this.email = email;
+        this.location = location;
         this.phone = phoneNumber;
     }
 }
