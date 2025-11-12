@@ -10,6 +10,9 @@ import com.devsam.shopmanagement.repository.OrderItemRepository;
 import com.devsam.shopmanagement.repository.OrderRepository;
 import com.devsam.shopmanagement.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -58,4 +61,10 @@ public class OrderServiceImpl implements OrderService {
         orderItemRepository.saveAll(orderItems);
         return orderRepository.save(order);
     }
+
+    @Override
+    public Page<Order> getAllOrders(Pageable pageable, User user) {
+        return orderRepository.findAll(pageable);
+    }
+
 }

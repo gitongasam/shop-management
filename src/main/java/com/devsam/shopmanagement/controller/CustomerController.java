@@ -2,10 +2,8 @@ package com.devsam.shopmanagement.controller;
 
 import com.devsam.shopmanagement.entity.Customer;
 import com.devsam.shopmanagement.entity.User;
-import com.devsam.shopmanagement.repository.CustomerRepository;
 import com.devsam.shopmanagement.repository.UserRepository;
 import com.devsam.shopmanagement.service.customer_service.CustomerService;
-import com.sun.security.auth.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

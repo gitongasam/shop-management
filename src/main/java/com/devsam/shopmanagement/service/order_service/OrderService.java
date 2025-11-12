@@ -2,9 +2,14 @@ package com.devsam.shopmanagement.service.order_service;
 
 import com.devsam.shopmanagement.dtos.OrderRequest;
 import com.devsam.shopmanagement.entity.Order;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.User;
 
 public interface OrderService {
     Order createOrder(OrderRequest orderRequest);
+
+    Page<Order> getAllOrders(Pageable pageable, User user);
 
 //    create an order
 
