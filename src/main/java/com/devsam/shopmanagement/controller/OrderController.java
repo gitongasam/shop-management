@@ -2,6 +2,7 @@ package com.devsam.shopmanagement.controller;
 
 
 import com.devsam.shopmanagement.dtos.OrderRequest;
+import com.devsam.shopmanagement.dtos.OrderResponse;
 import com.devsam.shopmanagement.entity.Order;
 import com.devsam.shopmanagement.entity.User;
 import com.devsam.shopmanagement.repository.UserRepository;
@@ -15,14 +16,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@RestController("api/v1/orders/")
+@RestController
+@RequestMapping("api/v1/orders")
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
 
     private final UserRepository userRepository;
     @PostMapping
-    public Order OrderController(OrderRequest orderRequest, @AuthenticationPrincipal UserDetails userDetails) {
+    public Order OrderController(@RequestBody OrderRequest orderRequest, @AuthenticationPrincipal UserDetails userDetails) {
 
         String email = userDetails.getUsername();
         User user = userRepository.findByEmail(email).orElseThrow(()-> new RuntimeException("User not found"));
@@ -30,7 +32,7 @@ public class OrderController {
     }
 
     @GetMapping
-    public Page<Order> getAllOrders(Pageable pageable, @AuthenticationPrincipal UserDetails userDetails) {
+    public Page<OrderResponse> getAllOrders(Pageable pageable, @AuthenticationPrincipal UserDetails userDetails) {
         String email = userDetails.getUsername();
         User user = userRepository.findByEmail(email).orElseThrow(()-> new RuntimeException("User not found"));
 

@@ -10,6 +10,4 @@ import java.util.UUID;
 
 public interface OrderRepository  extends JpaRepository<Order, UUID> {
     Page<Order> findAllByUser(Pageable pageable, User user);
-
-    UUID id(UUID id);
 }

@@ -2,6 +2,7 @@ package com.devsam.shopmanagement.dtos;
 
 
 import lombok.Data;
+import lombok.NonNull;
 
 import java.util.List;
 import java.util.UUID;
