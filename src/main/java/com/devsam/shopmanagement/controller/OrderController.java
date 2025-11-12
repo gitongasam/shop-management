@@ -11,9 +11,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController("api/v1/orders/")
 @RequiredArgsConstructor
@@ -22,8 +22,11 @@ public class OrderController {
 
     private final UserRepository userRepository;
     @PostMapping
-    public Order OrderController(OrderRequest orderRequest) {
-        return orderService.createOrder(orderRequest);
+    public Order OrderController(OrderRequest orderRequest, @AuthenticationPrincipal UserDetails userDetails) {
+
+        String email = userDetails.getUsername();
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new RuntimeException("User not found"));
+        return orderService.createOrder(orderRequest, user);
     }
 
     @GetMapping
@@ -33,5 +36,18 @@ public class OrderController {
 
         return orderService.getAllOrders(pageable, user);
     }
+
+    @GetMapping("{id}")
+    public Order getOrderById(@PathVariable UUID orderId) {
+        return orderService.getOrderById(orderId);
+    }
+
+    @PutMapping("{id}")
+    public Order updateOrder(@PathVariable UUID id, OrderRequest orderRequest, @AuthenticationPrincipal UserDetails userDetails) {
+        String email = userDetails.getUsername();
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new RuntimeException("User not found"));
+        return orderService.updateOrder(orderRequest, user, id);
+    }
+
 
 }

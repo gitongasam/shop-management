@@ -45,7 +45,7 @@ public class CustomerController {
 //    get customer by id
 
     @GetMapping("{id}")
-    public Customer getCustomer(@RequestParam UUID id) {
+    public Customer getCustomer(@PathVariable UUID id) {
         return customerService.findCustomerById(id);
     }
 
