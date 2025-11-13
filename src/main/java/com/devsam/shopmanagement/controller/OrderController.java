@@ -2,7 +2,6 @@ package com.devsam.shopmanagement.controller;
 
 
 import com.devsam.shopmanagement.dtos.OrderRequest;
-import com.devsam.shopmanagement.dtos.OrderResponse;
 import com.devsam.shopmanagement.entity.Order;
 import com.devsam.shopmanagement.entity.User;
 import com.devsam.shopmanagement.repository.UserRepository;
@@ -24,7 +23,7 @@ public class OrderController {
 
     private final UserRepository userRepository;
     @PostMapping
-    public Order OrderController(@RequestBody OrderRequest orderRequest, @AuthenticationPrincipal UserDetails userDetails) {
+    public Order OrderController(OrderRequest orderRequest, @AuthenticationPrincipal UserDetails userDetails) {
 
         String email = userDetails.getUsername();
         User user = userRepository.findByEmail(email).orElseThrow(()-> new RuntimeException("User not found"));
@@ -32,7 +31,7 @@ public class OrderController {
     }
 
     @GetMapping
-    public Page<OrderResponse> getAllOrders(Pageable pageable, @AuthenticationPrincipal UserDetails userDetails) {
+    public Page<Order> getAllOrders(Pageable pageable, @AuthenticationPrincipal UserDetails userDetails) {
         String email = userDetails.getUsername();
         User user = userRepository.findByEmail(email).orElseThrow(()-> new RuntimeException("User not found"));
 
@@ -40,8 +39,8 @@ public class OrderController {
     }
 
     @GetMapping("{id}")
-    public Order getOrderById(@PathVariable UUID orderId) {
-        return orderService.getOrderById(orderId);
+    public Order getOrderById(@PathVariable UUID id) {
+        return orderService.getOrderById(id);
     }
 
     @PutMapping("{id}")

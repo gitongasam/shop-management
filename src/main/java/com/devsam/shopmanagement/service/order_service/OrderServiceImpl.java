@@ -1,9 +1,7 @@
 package com.devsam.shopmanagement.service.order_service;
 
 import com.devsam.shopmanagement.dtos.OrderItemRequest;
-import com.devsam.shopmanagement.dtos.OrderItemResponse;
 import com.devsam.shopmanagement.dtos.OrderRequest;
-import com.devsam.shopmanagement.dtos.OrderResponse;
 import com.devsam.shopmanagement.entity.Order;
 import com.devsam.shopmanagement.entity.OrderItem;
 import com.devsam.shopmanagement.entity.User;
@@ -76,28 +74,13 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public Page<OrderResponse> getAllOrders(Pageable pageable, User user) {
-        Page<Order> ordersPage = orderRepository.findAllByUser(pageable, user);
-
-        return ordersPage.map(order -> OrderResponse.builder()
-                .status(order.getStatus())
-                .orderDate(order.getOrderDate())
-                .customerName(order.getCustomer() != null ? order.getCustomer().getName() : null)
-                .items(order.getOrderItems() != null ? order.getOrderItems().stream()
-                        .map(item -> OrderItemResponse.builder()
-                                .id(item.getId())
-                                .productName(item.getProduct() != null ? item.getProduct().getName() : null)
-                                .quantity(item.getQuantity())
-                                .priceAtSale(item.getPriceAtSale())
-                                .build())
-                        .toList() : List.of())
-                .build());
+    public Page<Order> getAllOrders(Pageable pageable, User user) {
+        return orderRepository.findAllByUser(pageable, user);
     }
 
-
     @Override
-    public Order getOrderById(UUID orderId) {
-        return orderRepository.findById(orderId).orElseThrow(()-> new ResourceNotFoundException("order with "+orderId +" not found"));
+    public Order getOrderById(UUID id) {
+        return orderRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("order with "+ id +" not found"));
     }
 
     @Override
