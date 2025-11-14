@@ -1,5 +1,6 @@
 package com.devsam.shopmanagement.service.Payment;
 
+import com.devsam.shopmanagement.PaymentStatus;
 import com.devsam.shopmanagement.dtos.PaymentRequest;
 import com.devsam.shopmanagement.dtos.PaymentResponse;
 import com.devsam.shopmanagement.entity.Order;
@@ -28,7 +29,7 @@ public class PaymentServiceImpl implements PaymentService{
 //         find the order
         Order order = orderRepository.findById(paymentRequest.getOrderId()).orElseThrow(() -> new ResourceNotFoundException("order not found"));
 
-        if(order.getStatus().equals("PAID")){
+        if(order.getStatus().equals(PaymentStatus.PAID)){
             throw new RuntimeException("Order is already paid");
         }
 
