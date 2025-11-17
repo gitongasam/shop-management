@@ -4,7 +4,6 @@ import com.devsam.shopmanagement.dtos.AuthResponse;
 import com.devsam.shopmanagement.dtos.LoginRequest;
 import com.devsam.shopmanagement.dtos.RegisterRequest;
 import com.devsam.shopmanagement.dtos.RegisterResponse;
-import com.devsam.shopmanagement.entity.User;
 import com.devsam.shopmanagement.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

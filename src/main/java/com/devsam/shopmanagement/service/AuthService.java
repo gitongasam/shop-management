@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 
 @Service
@@ -30,9 +31,12 @@ public class AuthService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .shopName(request.getShopName())
                 .build();
-         userRepository.save(user);
-
-         return new RegisterResponse("User created succsifullu ", user.getEmail());
+        // Generate verification code
+        SecureRandom secureRandom = new SecureRandom();
+        String verificationCode = String.format("%06d", secureRandom.nextInt(1_000_000));
+        user.setVerificationCode(verificationCode);
+        userRepository.save(user);
+         return new RegisterResponse("User created successfully ", user.getEmail());
     }
 
     public AuthResponse login(LoginRequest request) {
