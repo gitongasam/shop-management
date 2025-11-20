@@ -22,7 +22,6 @@ public class Order extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
     @JsonIgnore
-
     private Customer customer;
 
     @ManyToOne(fetch = FetchType.EAGER)

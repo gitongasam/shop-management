@@ -24,6 +24,11 @@ public class AuthController {
         return authService.login(request);
     }
 
+//    @PostMapping("forgot-password")
+//    public void forgotPassword(@RequestParam("email") String email) {
+//        authService.forgotPassword(email);
+//    }
+
     @PostMapping("/refresh")
     public AuthResponse refresh(@RequestParam("refreshToken") String refreshToken) {
         return authService.refresh(refreshToken);

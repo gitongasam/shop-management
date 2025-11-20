@@ -23,7 +23,7 @@ public class OrderController {
 
     private final UserRepository userRepository;
     @PostMapping
-    public Order OrderController(OrderRequest orderRequest, @AuthenticationPrincipal UserDetails userDetails) {
+    public Order OrderController(@RequestBody OrderRequest orderRequest, @AuthenticationPrincipal UserDetails userDetails) {
 
         String email = userDetails.getUsername();
         User user = userRepository.findByEmail(email).orElseThrow(()-> new RuntimeException("User not found"));

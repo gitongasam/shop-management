@@ -36,6 +36,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Page<Product> getAllProducts(Pageable pageable, User user) {
+        System.out.println(productRepository.findByUser(user,pageable));
         return productRepository.findByUser(user,pageable);
     }
 

@@ -37,6 +37,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public Order createOrder(OrderRequest orderRequest, User user) {
+
         if (orderRequest.getCustomerId() == null) throw new IllegalArgumentException("customerId must not be null");
         if (orderRequest.getItems() == null || orderRequest.getItems().isEmpty())
             throw new IllegalArgumentException("items must not be empty");
