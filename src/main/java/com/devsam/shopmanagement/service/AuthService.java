@@ -122,7 +122,7 @@ public class AuthService {
         user.setCodeExpiresAt(LocalDateTime.now().plusMinutes(15));
         userRepository.save(user);
 
-        emailService.sendVerificationEmail(verifyRequest.getFirstName(), verifyRequest.getEmail(), verificationCode);
+        emailService.sendVerificationEmail(user.getFirstName(), verifyRequest.getEmail(), verificationCode);
 
         return "verification code sent succesifully";
     }
