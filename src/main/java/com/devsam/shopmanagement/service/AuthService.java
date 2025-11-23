@@ -52,7 +52,7 @@ public class AuthService {
 
 //        check if user is verified
 
-        if(user.isActive()){
+        if (!user.isActive()) {
             throw new RuntimeException("User is not verified please check your email and verify.");
         }
 
@@ -95,7 +95,7 @@ public class AuthService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (user.getVerificationCode().equals(verifyRequest.getCode())
-                && user.getCodeExpiresAt().isBefore(LocalDateTime.now())) {
+                && user.getCodeExpiresAt().isAfter(LocalDateTime.now())) {
             user.setActive(true);
             user.setVerificationCode(null);
             user.setCodeExpiresAt(null);
