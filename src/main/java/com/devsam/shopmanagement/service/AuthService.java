@@ -1,13 +1,11 @@
 package com.devsam.shopmanagement.service;
 
-import com.devsam.shopmanagement.dtos.AuthResponse;
-import com.devsam.shopmanagement.dtos.LoginRequest;
-import com.devsam.shopmanagement.dtos.RegisterRequest;
-import com.devsam.shopmanagement.dtos.RegisterResponse;
+import com.devsam.shopmanagement.dtos.*;
 import com.devsam.shopmanagement.entity.User;
 import com.devsam.shopmanagement.repository.UserRepository;
 import com.devsam.shopmanagement.security.Jwt.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +19,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final EmailService emailService;
 
     public RegisterResponse register(RegisterRequest request) {
         // Create new user
@@ -35,8 +34,12 @@ public class AuthService {
         SecureRandom secureRandom = new SecureRandom();
         String verificationCode = String.format("%06d", secureRandom.nextInt(1_000_000));
         user.setVerificationCode(verificationCode);
+        user.setCodeExpiresAt(LocalDateTime.now().plusMinutes(15));
         userRepository.save(user);
-         return new RegisterResponse("User created successfully ", user.getEmail());
+
+        emailService.sendVerificationEmail(request.getFirstName(), request.getEmail(), verificationCode);
+
+        return new RegisterResponse("User created successfully ", user.getEmail());
     }
 
     public AuthResponse login(LoginRequest request) {
@@ -45,6 +48,12 @@ public class AuthService {
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new RuntimeException("Invalid credentials");
+        }
+
+//        check if user is verified
+
+        if(user.isActive()){
+            throw new RuntimeException("User is not verified please check your email and verify.");
         }
 
         // Generate new tokens
@@ -78,5 +87,22 @@ public class AuthService {
         String newAccessToken = jwtService.generateAccessToken(email, "USER");
 
         return new AuthResponse(newAccessToken, refreshToken);
+    }
+
+    public String verifyCode(VerifyRequest verifyRequest) {
+
+        User user = userRepository.findByEmail(verifyRequest.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (user.getVerificationCode().equals(verifyRequest.getCode())
+                && user.getCodeExpiresAt().isBefore(LocalDateTime.now())) {
+            user.setActive(true);
+            user.setVerificationCode(null);
+            user.setCodeExpiresAt(null);
+            userRepository.save(user);
+
+            return "Email verified successfully proceed to login";
+        }
+        return "Invalid or expired code";
     }
 }

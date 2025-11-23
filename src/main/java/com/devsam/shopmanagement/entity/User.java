@@ -39,11 +39,14 @@ public class User extends BaseEntity {
     @Column(name = "shop_name", nullable = false)
     private String shopName;
 
-    @Column(name = " verification_code")
+    @Column(name = "verification_code")
     private String verificationCode;
 
     @Column(name = "code_expires_at")
     private LocalDateTime codeExpiresAt;
+
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive = false;
 
     // Relationships
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
