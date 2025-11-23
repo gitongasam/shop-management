@@ -30,5 +30,9 @@ public class AuthController {
         return authService.verifyCode(verifyRequest);
     }
 
+    @PostMapping("/resend-verification-code")
+    public String resendVerificationCode(@RequestBody VerifyRequest verifyRequest) {
+        return authService.resendVerificationCode(verifyRequest);
+    }
 
 }

@@ -105,4 +105,25 @@ public class AuthService {
         }
         return "Invalid or expired code";
     }
+
+    public String resendVerificationCode(VerifyRequest verifyRequest) {
+        User user = userRepository.findByEmail(verifyRequest.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+//        check if user is active
+        if(user.isActive()){
+            throw new RuntimeException("User is already verified");
+        }
+
+        // Generate verification code
+        SecureRandom secureRandom = new SecureRandom();
+        String verificationCode = String.format("%06d", secureRandom.nextInt(1_000_000));
+        user.setVerificationCode(verificationCode);
+        user.setCodeExpiresAt(LocalDateTime.now().plusMinutes(15));
+        userRepository.save(user);
+
+        emailService.sendVerificationEmail(verifyRequest.getFirstName(), verifyRequest.getEmail(), verificationCode);
+
+        return "verification code sent succesifully";
+    }
 }
