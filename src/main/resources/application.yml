@@ -22,6 +22,18 @@ spring:
     user: postgres
     password: password
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: samgitonga66@gmail.com
+    password: qzho ypkj cimh jjxw
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 jwt:
   secret: "b2df428b9929d3ace7c6e7f49e9a5e5f478c25d6f83f1c4e5b8f1e5f4a9d8b77"
   access:
