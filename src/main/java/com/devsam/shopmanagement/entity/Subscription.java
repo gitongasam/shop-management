@@ -1,11 +1,9 @@
 package com.devsam.shopmanagement.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 
+import java.sql.ConnectionBuilder;
 import java.time.LocalDate;
 
 @Entity
@@ -13,6 +11,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 public class Subscription extends BaseEntity{
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -32,4 +31,6 @@ public class Subscription extends BaseEntity{
 
     @Column(name = "mpesa_transaction_id")
     private String mpesaTransactionId;
+
+
 }
