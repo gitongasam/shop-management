@@ -1,9 +1,11 @@
 package com.devsam.shopmanagement.service.order_service;
 
+import com.devsam.shopmanagement.PaymentStatus;
 import com.devsam.shopmanagement.dtos.OrderItemRequest;
 import com.devsam.shopmanagement.dtos.OrderRequest;
 import com.devsam.shopmanagement.entity.Order;
 import com.devsam.shopmanagement.entity.OrderItem;
+import com.devsam.shopmanagement.entity.Payment;
 import com.devsam.shopmanagement.entity.User;
 import com.devsam.shopmanagement.errors.ResourceNotFoundException;
 import com.devsam.shopmanagement.repository.CustomerRepository;
@@ -33,7 +35,6 @@ public class OrderServiceImpl implements OrderService {
     private final ProductRepository productRepository;
 
     private final OrderItemRepository orderItemRepository;
-    // java
     @Override
     @Transactional
     public Order createOrder(OrderRequest orderRequest, User user) {

@@ -33,6 +33,9 @@ public class User extends BaseEntity {
     @Column (nullable = true)
     private String refreshToken;
 
+    @Column(name = "phone_number", nullable = false)
+    private String phoneNumber;
+
     @Column(name = "refresh_token_expiry")
     private LocalDateTime refreshTokenExpiry;
 
