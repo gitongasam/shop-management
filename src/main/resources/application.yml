@@ -53,7 +53,7 @@ mpesa:
     business.shortcode: "174379"
     passkey: bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919
 
-    callback.url: "https://b74af7b4230a.ngrok-free.app/api/v1/payments/mpesa/callback"
+    callback.url: "https://65cf451b8949.ngrok-free.app/api/v1/payments/mpesa/callback"
 
     auth.url: "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
     stk.push.url: "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"

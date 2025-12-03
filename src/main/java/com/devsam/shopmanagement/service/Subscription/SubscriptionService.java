@@ -23,32 +23,40 @@ public class SubscriptionService {
     private final MpesaClient mpesaClient;
 
     // example pricing map
-    private static final Map<String, String> PLAN_PRICES = Map.of("monthly", "1000");
+    private static final Map<String, String> PLAN_PRICES = Map.of("monthly", "1");
 
     @Transactional
     public String initiateSubscriptionPayment(SubscriptionRequest subscriptionRequest, User user) {
 
         UUID userId = user.getId();
+        String plan = subscriptionRequest.getPlan();
+        String phoneNumber = subscriptionRequest.getPhoneNumber();
 
-        // Find or create subscription
-        var subscription = subscriptionRepository.findByUser_Id(userId)
+        // Normalize phone number to 254 format
+        if (phoneNumber.startsWith("0")) {
+            phoneNumber = "254" + phoneNumber.substring(1);
+        }
+
+        // Find or create subscription for this user
+        Subscription subscription = subscriptionRepository.findByUser_Id(userId)
                 .orElseGet(() -> {
                     Subscription s = Subscription.builder()
                             .user(user)
+                            .plan(plan)
                             .status("PENDING_PAYMENT")
                             .build();
                     return subscriptionRepository.save(s);
                 });
 
-        String plan = subscriptionRequest.getPlan();
-        String phoneNumber = subscriptionRequest.getPhoneNumber();
-
+        // Update plan in case user selected a different one
+        subscription.setPlan(plan);
+        subscription.setStatus("PENDING_PAYMENT");
+        subscriptionRepository.save(subscription);
         // Choose amount by plan
         String amount = PLAN_PRICES.getOrDefault(plan, "1");
-
+        // Generate account reference for tracking
+        String accountRef = "SUB-" + user.getId().toString().substring(0, 8);
         // Start STK Push
-        String accountRef = "SAMGITONGA-" + user.getId().toString().substring(0, 8);
-
         ResponseEntity<Map> resp = mpesaClient.stkPush(
                 phoneNumber,
                 amount,

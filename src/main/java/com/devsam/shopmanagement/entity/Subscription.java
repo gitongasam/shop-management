@@ -31,6 +31,4 @@ public class Subscription extends BaseEntity{
 
     @Column(name = "mpesa_transaction_id")
     private String mpesaTransactionId;
-
-
 }

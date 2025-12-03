@@ -62,9 +62,8 @@ public class MpesaClient {
         body.put("CallBackURL", callbackUrl);
         body.put("AccountReference", accountRef);
         body.put("TransactionDesc", transactionDesc);
-
-
         HttpEntity<Map<String,Object>> entity = new HttpEntity<>(body, headers);
-        return rest.postForEntity(stkPushUrl,entity, Map.class);
+        System.out.println("STK PUSH BODY => " + body);
+        return rest.postForEntity(stkPushUrl, entity, Map.class);
     }
 }

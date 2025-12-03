@@ -8,5 +8,4 @@ import java.util.UUID;
 
 public interface SubscriptionRepository  extends JpaRepository<Subscription, UUID> {
     Optional<Subscription> findByUser_Id(UUID userId);
-//    Optional<Subscription> findByUser_Phone(String phone);
 }
