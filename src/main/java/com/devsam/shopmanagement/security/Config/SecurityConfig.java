@@ -24,6 +24,7 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final CustomUserDetailsService userDetailsService;
+    private final SubscriptionFilter subscriptionFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -61,6 +62,7 @@ public class SecurityConfig {
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAfter(subscriptionFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
