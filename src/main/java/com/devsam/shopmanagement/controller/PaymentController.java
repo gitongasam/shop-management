@@ -64,48 +64,49 @@ public class PaymentController {
 
 
     @PostMapping("/mpesa/callback")
-    @Transactional
-    public ResponseEntity<String> handleMpesaCallback(@RequestBody Map<String, Object> payload) {
-        System.out.println("Mpesa callback received: " + payload);
+    public ResponseEntity<?> mpesaCallback(@RequestBody Map<String, Object> payload) {
         try {
             Map body = (Map) payload.get("Body");
             Map stkCallback = (Map) body.get("stkCallback");
-            Integer resultCode = (Integer) stkCallback.get("ResultCode");
 
-            if (resultCode == null || resultCode != 0) {
-                return ResponseEntity.ok("Payment failed or cancelled");
+            int resultCode = (int) stkCallback.get("ResultCode");
+
+            if (resultCode != 0) {
+                System.out.println("Payment failed");
+                return ResponseEntity.ok().build();
             }
 
-            // Get callback metadata
             Map callbackMetadata = (Map) stkCallback.get("CallbackMetadata");
-            List<Map<String,Object>> items = (List<Map<String,Object>>) callbackMetadata.get("Item");
+            List<Map> items = (List<Map>) callbackMetadata.get("Item");
 
-            String mpesaReceiptNumber = null;
-            for (Map<String,Object> item : items) {
+            String receipt = null;
+            String phone = null;
+
+            for (Map item : items) {
                 if ("MpesaReceiptNumber".equals(item.get("Name"))) {
-                    mpesaReceiptNumber = String.valueOf(item.get("Value"));
+                    receipt = item.get("Value").toString();
+                }
+                if ("PhoneNumber".equals(item.get("Name"))) {
+                    phone = item.get("Value").toString();
                 }
             }
 
-            if (mpesaReceiptNumber == null) {
-                throw new RuntimeException("Mpesa receipt number not found");
-            }
+            // find user by phone
+            User user = userRepository.findByPhoneNumber(phone)
+                    .orElseThrow(() -> new RuntimeException("User not found for phone "));
 
-            // Extract the userId from AccountReference (set during STK Push)
-            String accountRef = (String) stkCallback.get("AccountReference");
-            if (accountRef == null) {
-                throw new RuntimeException("AccountReference not found in callback");
-            }
+            // activate subscription
+            subscriptionService.activateSubscriptionForUser(
+                    user.getId(),
+                    30,
+                    receipt
+            );
 
-            UUID userId = UUID.fromString(accountRef); // parse userId
+            return ResponseEntity.ok("Subscription activated");
 
-            // Activate subscription for the logged-in user
-            subscriptionService.activateSubscriptionForUser(userId, 30, mpesaReceiptNumber);
-
-            return ResponseEntity.ok("OK");
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).body("Error processing callback");
+            return ResponseEntity.ok().build();
         }
     }
 
