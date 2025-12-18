@@ -29,6 +29,7 @@ public class SubscriptionFilter extends OncePerRequestFilter {
     // paths that must be reachable without an active subscription
     private final List<String> whitelist = List.of(
             "/api/v1/payments/subscribe",
+            "/api/v1/payments/subscription-status",
             "/api/v1/payments/mpesa/callback",
             "/api/v1/auth/**",
             "/v3/api-docs/**",

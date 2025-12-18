@@ -13,6 +13,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -109,5 +110,15 @@ public class PaymentController {
             return ResponseEntity.ok().build();
         }
     }
+    @GetMapping("/subscription-status")
+    public ResponseEntity<?> checkSubscriptionStatus(@AuthenticationPrincipal UserDetails userDetails) {
+        User user = userRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
+        boolean isActive = subscriptionService.isActive(user.getId());
+        return ResponseEntity.ok(Map.of(
+                "subscribed", isActive,
+                "status", isActive ? "ACTIVE" : "PENDING_PAYMENT"
+        ));
+    }
 }

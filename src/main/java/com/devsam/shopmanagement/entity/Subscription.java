@@ -1,5 +1,6 @@
 package com.devsam.shopmanagement.entity;
 
+import com.devsam.shopmanagement.enums.SubscriptionStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,8 +27,10 @@ public class Subscription extends BaseEntity{
 
     @Column(name = "plan")
     private String plan;
+
     @Column(name = "status")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private SubscriptionStatus status;
 
     @Column(name = "mpesa_transaction_id")
     private String mpesaTransactionId;

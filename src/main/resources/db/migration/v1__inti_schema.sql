@@ -83,8 +83,7 @@ CREATE TABLE order_items (
 -- =====================================================
 CREATE TABLE payments (
                           id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-                          order_id UUID REFERENCES orders(id) ON DELETE CASCADE,
-                          amount NUMERIC(12,2) NOT NULL,
+                                    amount NUMERIC(12,2) NOT NULL,
                           payment_method VARCHAR(50),
                           payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                           status VARCHAR(50) DEFAULT 'UNPAID',
@@ -92,3 +91,22 @@ CREATE TABLE payments (
                           updated_at TIMESTAMP,
                           deleted_at TIMESTAMP
 );
+
+CREATE TABLE PaymentAccount
+(
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    bankMpesaPaybillNumber varchar(150),
+    accountHolderName  varchar(150),
+    accountNumber varchar(150),
+    status VARCHAR(50) DEFAULT 'ENABLED'
+);
+
+
+ALTER TABLE users
+    ADD COLUMN code_expires_at TIMESTAMP;
+
+ALTER TABLE users
+    add COLUMN IS_ACTIVE boolean DEFAULT FALSE;
+
+ALTER TABLE users ALTER COLUMN is_active SET NOT NULL;
+

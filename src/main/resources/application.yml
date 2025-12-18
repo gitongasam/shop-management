@@ -3,7 +3,7 @@ spring:
     name: shop-management
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/shop_management
+    url: jdbc:postgresql://localhost:5432/shop_db
     username: postgres
     password: password
     driver-class-name: org.postgresql.Driver
@@ -18,9 +18,10 @@ spring:
 
   flyway:
     enabled: true
-    url: jdbc:postgresql://localhost:5432/shop_management
+    url: jdbc:postgresql://localhost:5432/shop_db
     user: postgres
     password: password
+    baseline-on-migrate: true
 
   mail:
     host: smtp.gmail.com
@@ -41,8 +42,8 @@ jwt:
   refresh:
     expiration: 604800000
 
-profiles:
-  active: docker
+  profiles:
+    active: docker
 
 server:
   port: 8080
@@ -53,7 +54,7 @@ mpesa:
     business.shortcode: "174379"
     passkey: bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919
 
-    callback.url: "https://65cf451b8949.ngrok-free.app/api/v1/payments/mpesa/callback"
+    callback.url: "https://5cfcdceef99e.ngrok-free.app/api/v1/payments/mpesa/callback"
 
     auth.url: "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
     stk.push.url: "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"

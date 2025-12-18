@@ -11,3 +11,11 @@ CREATE TABLE subscriptions(
 );
 
 ALTER TABLE users ADD COLUMN phone_number VARCHAR(20);
+
+
+
+select * from users;
+
+select * from subscriptions;
+
+delete from users where id = 'f9b9d970-4f61-4c3c-8a4b-d98b7e5443d4';

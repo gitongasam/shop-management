@@ -7,7 +7,7 @@ ALTER TABLE customers
 
 
 
-ALTER TABLE customers ADD COLUMN location;
+ALTER TABLE customers ADD COLUMN location VARCHAR(150);
 
 UPDATE customers SET location = 'Unknown' WHERE location IS NULL;
 

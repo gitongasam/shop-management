@@ -3,6 +3,7 @@ package com.devsam.shopmanagement.service.Subscription;
 import com.devsam.shopmanagement.dtos.SubscriptionRequest;
 import com.devsam.shopmanagement.entity.Subscription;
 import com.devsam.shopmanagement.entity.User;
+import com.devsam.shopmanagement.enums.SubscriptionStatus;
 import com.devsam.shopmanagement.repository.SubscriptionRepository;
 import com.devsam.shopmanagement.service.Payment.mpesa.MpesaClient;
 import lombok.RequiredArgsConstructor;
@@ -43,14 +44,14 @@ public class SubscriptionService {
                     Subscription s = Subscription.builder()
                             .user(user)
                             .plan(plan)
-                            .status("PENDING_PAYMENT")
+                            .status(SubscriptionStatus.PENDING_PAYMENT)
                             .build();
                     return subscriptionRepository.save(s);
                 });
 
         // Update plan in case user selected a different one
         subscription.setPlan(plan);
-        subscription.setStatus("PENDING_PAYMENT");
+        subscription.setStatus(SubscriptionStatus.PENDING_PAYMENT);
         subscriptionRepository.save(subscription);
         // Choose amount by plan
         String amount = PLAN_PRICES.getOrDefault(plan, "1");
@@ -78,29 +79,32 @@ public class SubscriptionService {
                     return Subscription.builder()
                             .user(user)
                             .startDate(LocalDate.now())
-                            .status("ACTIVE")
+                            .status(SubscriptionStatus.ACTIVE)
                             .build();
                 });
 
         subscription.setStartDate(LocalDate.now());
         subscription.setEndDate(LocalDate.now().plusDays(days));
-        subscription.setStatus("ACTIVE");
+        subscription.setStatus(SubscriptionStatus.ACTIVE);
         subscription.setMpesaTransactionId(mpesaTransactionId);
         subscriptionRepository.save(subscription);
     }
 
     public boolean isActive(UUID userId) {
         return subscriptionRepository.findByUser_Id(userId)
-                .map(s -> s.getStatus().equals("ACTIVE") && s.getEndDate().isAfter(LocalDate.now()))
+                .map(s -> {
+                    if (s.getStatus() == null || s.getEndDate() == null) return false;
+                    return SubscriptionStatus.ACTIVE.equals(s.getStatus()) && !s.getEndDate().isBefore(LocalDate.now());
+                })
                 .orElse(false);
     }
 
     @Transactional
     public void expireSubscriptions() {
         subscriptionRepository.findAll().stream()
-                .filter(s -> s.getEndDate() != null && s.getEndDate().isBefore(LocalDate.now()) && "ACTIVE".equals(s.getStatus()))
+                .filter(s -> s.getEndDate() != null && s.getEndDate().isBefore(LocalDate.now()) && SubscriptionStatus.PENDING_PAYMENT.equals(s.getStatus()))
                 .forEach(s -> {
-                    s.setStatus("EXPIRED");
+                    s.setStatus(SubscriptionStatus.EXPIRED);
                     subscriptionRepository.save(s);
                 });
     }
